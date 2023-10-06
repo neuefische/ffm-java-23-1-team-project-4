@@ -28,6 +28,7 @@ export default function NewBlogEntry(){
                 // Füge hier ggf. Fehlerbehandlung hinzu
             });
 
+
     }
 
 
