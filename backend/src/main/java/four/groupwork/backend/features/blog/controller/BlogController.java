@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/blogs")
 @RequiredArgsConstructor
@@ -14,10 +16,38 @@ public class BlogController
 {
     private final BlogService blogService;
 
-    @PostMapping
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    public List<BlogEntry> getAllBlogs()
+    {
+        return blogService.getAllBlogs();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BlogEntry getBlog(@PathVariable String id)
+    {
+        return blogService.getBlogEntry(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BlogEntry addBlog(@RequestBody NewBlog newBlog)
     {
         return blogService.addBlogEntry(newBlog);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteBlog(@PathVariable String id)
+    {
+        blogService.deleteBlogEntry(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BlogEntry updateBlog(@PathVariable String id, @RequestBody NewBlog newBlog)
+    {
+        return blogService.updateBlogEntry(id, newBlog);
     }
 }
