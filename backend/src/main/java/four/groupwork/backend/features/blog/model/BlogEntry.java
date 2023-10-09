@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.List;
+
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,5 @@ public class BlogEntry
     private String title;
 
     private String content;
+    private List<String> hashtags;
 }
