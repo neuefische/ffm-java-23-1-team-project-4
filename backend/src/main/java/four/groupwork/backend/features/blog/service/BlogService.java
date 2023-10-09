@@ -24,6 +24,7 @@ public class BlogService
         BlogEntry blog = BlogEntry.builder()
                 .content(newBlog.getContent())
                 .title(newBlog.getTitle())
+                .hashtags(newBlog.getHashtags())
                 .build();
 
         return blogRepo.save(blog);
