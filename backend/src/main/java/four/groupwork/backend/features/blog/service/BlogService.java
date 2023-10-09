@@ -20,10 +20,10 @@ public class BlogService
 
     public BlogEntry addBlogEntry(NewBlog newBlog)
     {
-
         BlogEntry blog = BlogEntry.builder()
                 .content(newBlog.getContent())
                 .title(newBlog.getTitle())
+                .hashtags(newBlog.getHashtags())
                 .build();
 
         return blogRepo.save(blog);
