@@ -4,6 +4,7 @@ import axios from "axios";
 type NewBlog = {
     title: string;
     content: string;
+    hashtags : string[];
 };
 
 type Tag = {
@@ -36,6 +37,7 @@ export default function NewBlogEntry(){
         {
             title: title,
             content: text,
+            hashtags : mytags,
         };
         axios
             .post("/api/blogs",newBlogEntry)
@@ -49,8 +51,6 @@ export default function NewBlogEntry(){
                 console.error("Fehler beim Speichern:", error);
                 // Füge hier ggf. Fehlerbehandlung hinzu
             });
-
-
     }
 
 
