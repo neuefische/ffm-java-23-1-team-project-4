@@ -1,5 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 type NewBlog = {
     title: string;
@@ -27,6 +28,8 @@ export default function NewBlogEntry(){
         setTags(newTags); // Update the state
     };
 
+    const navigateTo = useNavigate()
+
     function onSubmit()
     {
         //function to delete and entry with the name default text
@@ -46,10 +49,12 @@ export default function NewBlogEntry(){
                 console.log("Erfolgreich gespeichert:", response.data);
                 // Füge hier ggf. weitere Aktionen nach erfolgreicher Speicherung hinzu
             })
+            .then(()=>navigateTo("/"))
             .catch((error) => {
                 // Fehler verarbeiten
                 console.error("Fehler beim Speichern:", error);
                 // Füge hier ggf. Fehlerbehandlung hinzu
+                //Damit es klappt
             });
     }
 

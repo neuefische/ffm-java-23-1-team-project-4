@@ -64,8 +64,10 @@ export default function EntryComponent(props: props) {
             <p>{props.blogEntry.content}</p>
             <button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>Delete</button>
             <TagList>Tags:
-                <Tag>#Tag1</Tag>
-                <Tag>#Tag2</Tag>
+                {props.blogEntry.hashtags.map(hashtag=> {
+                        return <Tag>{hashtag}</Tag>
+                    }
+                )}
             </TagList>
         </Container>
     </>
