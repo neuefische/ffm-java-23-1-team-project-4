@@ -54,6 +54,7 @@ export default function NewBlogEntry(){
                 // Fehler verarbeiten
                 console.error("Fehler beim Speichern:", error);
                 // Füge hier ggf. Fehlerbehandlung hinzu
+                //Damit es klappt
             });
     }
 
