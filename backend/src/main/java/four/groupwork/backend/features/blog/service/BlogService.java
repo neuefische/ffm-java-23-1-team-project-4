@@ -5,6 +5,7 @@ import four.groupwork.backend.features.blog.model.NewBlog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class BlogService
                 .content(newBlog.getContent())
                 .title(newBlog.getTitle())
                 .hashtags(newBlog.getHashtags())
+                .timeCreated(Instant.now())
                 .build();
 
         return blogRepo.save(blog);
