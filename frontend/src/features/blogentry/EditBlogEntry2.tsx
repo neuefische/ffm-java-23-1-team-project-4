@@ -1,86 +1,123 @@
 import {BlogEntry} from "../../model/BlogEntryModel.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 export default function EditBlogEntry(){
 
     const navigateTo = useNavigate()
     const { id } = useParams();
+    const [blogentry , setBlogentry] = useState<BlogEntry>()
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error , setError] = useState<boolean>(false);
 
-    const [title, setTitle, ] = useState<string>("")
-    const [text, setText, ] = useState("")
-    const [tags, setTags,] = useState<string[]>([])
 
-    const [blogentry , setBlogentry]
-        = useState<BlogEntry>()
-
-    useEffect(() => {
-        const fetchBlog = async () => {
-            const response = await axios(`/api/blogs/${id}`);
-            setBlogentry(response.data);
-
-            if(blogentry?.title) setTitle(blogentry?.title)
-            if(blogentry?.content) setText(blogentry?.content)
-            if(blogentry?.hashtags)setTags(blogentry?.hashtags)
+    useEffect( () =>
+    {
+        const fetchBlog = async () =>
+        {
+            try {
+                const response = await axios(`/api/blogs/${id}`);
+                setBlogentry(response.data);
+                setLoading(false);
+            } catch (error) {
+                setError(true);
+                setLoading(false);
+            }
         };
-        fetchBlog();
-
+        fetchBlog().then();
     }, []);
 
     const addNewTag = () => {
-        setTags([...tags, ""]);
+        if(blogentry)
+            setBlogentry({ ...blogentry, hashtags : [...blogentry.hashtags, ""] });
     };
 
-    const changeTagName = (index: number, name : string) => {
-        const newTags = [...tags]; // Clone the tags array
-        newTags[index] = name; // Change the name of the tag at the given index
-        setTags(newTags); // Update the state
-    };
 
     const deleteTag = (index: number) => {
-        const newTags = [...tags]; // Clone the tags array
-        newTags.splice(index, 1); // Remove the tag at the given index
-        setTags(newTags); // Update the state
+        if (blogentry && blogentry.hashtags) {
+            const newTags = [...blogentry.hashtags];
+            newTags.splice(index, 1);
+            setBlogentry({ ...blogentry, hashtags: newTags });
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (blogentry) {
+            const mytags = blogentry.hashtags.filter((tag) => tag !== "");
+
+            console.log(blogentry)
+            console.log(mytags)
+            const date = blogentry.timeCreated ? new Date(blogentry.timeCreated) : new Date();
+            const formattedDate = date.toISOString()
+
+            const changedBlogEntry: BlogEntry =
+            {
+                id: blogentry.id,
+                title: blogentry.title,
+                content: blogentry.content,
+                hashtags: mytags,
+                timeCreated: formattedDate,
+            };
+            axios
+                .put("/api/blogs/" + id, changedBlogEntry)
+                .then(() => navigateTo("/"))
+                .catch((error) => {
+                    console.error("Fehler beim Speichern:", error);
+                });
+        }
     }
+
+    if(loading) return <div>Loading...</div>
+    if(error) return <div>Something went wrong</div>
 
 return(
 <>
+<form onSubmit={handleSubmit}>
     <h1>NewBlog</h1>
 
-    <p>
-        <input value={title}
-               onChange={(event)=>
-                   setTitle(event.target.value)}></input>
-    </p>
 
-    <p>
-        <textarea rows={10}
-                  value={text}
-                  onChange={(event)=>
-                      setText(event.target.value)}></textarea>
-    </p>
-
+    {blogentry && (
     <div>
+        <p>
+            <input
+                value={blogentry.title || ''}
+                onChange={(e) => {
+                    setBlogentry({...blogentry, title: e.target.value});
+                }}/>
+        </p>
+
+        <p>
+            <textarea rows={10}
+                value={blogentry.content}
+                onChange={(e) => {
+                   setBlogentry({...blogentry, content: e.target.value});
+                }}/>
+        </p>
         <span>Tags:</span>
-        {tags && tags.map((tag, index) => (
+        {blogentry.hashtags && blogentry.hashtags.map((tag, index) => (
             <div key={index}>
                 <span>{index + 1}. </span>
                 <input
                     value={tag}
-                    placeholder={"#Enter a Tag"}
-                    onChange={(event) =>
-                        changeTagName(index, event.target.value)}/>
+                    onChange={((event ) => {
+                        const newTags = [...blogentry.hashtags];
+                        newTags[index] = event.target.value;
+                        setBlogentry({ ...blogentry, hashtags: newTags });
+                    })}
+                />
 
-                <button onClick={() => addNewTag()}> + </button>
-                <button onClick={() => deleteTag(index)}> - </button>
+                <button type={"button"} onClick={addNewTag}> + </button>
+                <button type={"button"} onClick={() => deleteTag(index)}> - </button>
             </div>
         ))}
-    </div>
+    </div>)}
 
-    <button onClick={() => navigateTo(-1)}>Discard Changes</button>
-    <button>Save Changes</button>
-    </>
+    <button onClick={() => navigateTo("/")}>Discard Changes</button>
+    <button onClick={handleSubmit}> Save Changes</button>
+</form>
+</>
  )
 }
