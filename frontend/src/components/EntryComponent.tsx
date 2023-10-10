@@ -1,4 +1,4 @@
-import {BlogEntry} from "./model/BlogEntryModel.tsx";
+import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import styled from "styled-components";
 
 export type props = {
@@ -50,8 +50,10 @@ padding: 0.2em;`;
 
 export default function EntryComponent(props: props) {
 
-    const date = new Date(props.blogEntry.timeCreated)
+    const date : string = new Date(props.blogEntry.timeCreated)
                         .toLocaleDateString()
+    const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+    const time: string = new Date(props.blogEntry.timeCreated).toLocaleTimeString(undefined, timeOptions);
 
     function handleClickBookmark() {
         console.log("Bookmark was clicked.")
@@ -61,7 +63,7 @@ export default function EntryComponent(props: props) {
         <Container>
             <TitleContainer>
                 <Title>{props.blogEntry.title}</Title>
-                <small>{date}</small>
+                <small>{date + " " + time}</small>
             </TitleContainer>
             <BookmarkButton type="button" onClick={handleClickBookmark}>Bookmark</BookmarkButton>
             <p>{props.blogEntry.content}</p>
