@@ -50,6 +50,9 @@ padding: 0.2em;`;
 
 export default function EntryComponent(props: props) {
 
+    const date = new Date(props.blogEntry.timeCreated)
+                        .toLocaleDateString()
+
     function handleClickBookmark() {
         console.log("Bookmark was clicked.")
     }
@@ -58,7 +61,7 @@ export default function EntryComponent(props: props) {
         <Container>
             <TitleContainer>
                 <Title>{props.blogEntry.title}</Title>
-                <small>01.01.2000</small>
+                <small>{date}</small>
             </TitleContainer>
             <BookmarkButton type="button" onClick={handleClickBookmark}>Bookmark</BookmarkButton>
             <p>{props.blogEntry.content}</p>
