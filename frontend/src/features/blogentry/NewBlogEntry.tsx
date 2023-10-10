@@ -1,16 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
-type NewBlog = {
-    title: string;
-    content: string;
-    hashtags : string[];
-};
-
-type Tag = {
-  name: string;
-};
+import {NewBlog, Tag} from "./model/model.ts";
 
 export default function NewBlogEntry(){
 
