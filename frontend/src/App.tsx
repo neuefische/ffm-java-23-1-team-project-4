@@ -1,8 +1,8 @@
 import './App.css'
 
-import HomePage from "./features/home/HomePage.tsx";
+import HomePage from "./pages/home/HomePage.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import NewBlogEntry from "./features/blogentry/NewBlogEntry.tsx";
+import NewBlogEntry from "./pages/blogentry/NewBlogEntry.tsx";
 
 export default function App()
 {
