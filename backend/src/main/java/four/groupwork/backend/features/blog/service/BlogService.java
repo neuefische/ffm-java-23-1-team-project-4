@@ -1,11 +1,10 @@
 package four.groupwork.backend.features.blog.service;
 
 import four.groupwork.backend.features.blog.model.BlogEntry;
+import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -13,27 +12,28 @@ import java.util.List;
 public class BlogService
 {
     private final BlogRepo blogRepo;
+    private final BlogMappingService bms;
 
-    public List<BlogEntry> getAllBlogs()
-    {
-        return blogRepo.findAll();
+    public List<BlogResponse> getAllBlogs() {
+
+
+        return blogRepo.findAll().stream()
+                .map(bms::mapBlogToResponse)
+                .toList();
     }
 
-    public BlogEntry addBlogEntry(NewBlog newBlog)
+    public BlogResponse addBlogEntry(NewBlog newBlog)
     {
-        BlogEntry blog = BlogEntry.builder()
-                .content(newBlog.getContent())
-                .title(newBlog.getTitle())
-                .hashtags(newBlog.getHashtags())
-                .timeCreated(Instant.now())
-                .build();
+        BlogEntry blog = bms.mapNewBlogToBlogEntry(newBlog);
+        blogRepo.save(blog);
 
-        return blogRepo.save(blog);
+        return bms.mapBlogToResponse(blog);
     }
 
-    public BlogEntry getBlogEntry(String id)
+    public BlogResponse getBlogEntry(String id)
     {
-        return blogRepo.findById(id).orElseThrow();
+        BlogEntry blog = blogRepo.findById(id).orElseThrow();
+        return bms.mapBlogToResponse(blog);
     }
 
     public void deleteBlogEntry(String id)
@@ -41,11 +41,15 @@ public class BlogService
         blogRepo.deleteById(id);
     }
 
-    public BlogEntry updateBlogEntry(String id, NewBlog newBlog)
+    public BlogResponse updateBlogEntry(String id, NewBlog newBlog)
     {
         BlogEntry blog = blogRepo.findById(id).orElseThrow();
+
+        //Only setting content and title as of now
         blog.setContent(newBlog.getContent());
         blog.setTitle(newBlog.getTitle());
-        return blogRepo.save(blog);
+        blogRepo.save(blog);
+
+        return bms.mapBlogToResponse(blog);
     }
 }

@@ -1,6 +1,6 @@
 package four.groupwork.backend.features.blog.controller;
 
-import four.groupwork.backend.features.blog.model.BlogEntry;
+import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
 import four.groupwork.backend.features.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +18,21 @@ public class BlogController
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BlogEntry> getAllBlogs()
+    public List<BlogResponse> getAllBlogs()
     {
         return blogService.getAllBlogs();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BlogEntry getBlog(@PathVariable String id)
+    public BlogResponse getBlog(@PathVariable String id)
     {
         return blogService.getBlogEntry(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BlogEntry addBlog(@RequestBody NewBlog newBlog)
+    public BlogResponse addBlog(@RequestBody NewBlog newBlog)
     {
         return blogService.addBlogEntry(newBlog);
     }
@@ -46,7 +46,7 @@ public class BlogController
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BlogEntry updateBlog(@PathVariable String id, @RequestBody NewBlog newBlog)
+    public BlogResponse updateBlog(@PathVariable String id, @RequestBody NewBlog newBlog)
     {
         return blogService.updateBlogEntry(id, newBlog);
     }
