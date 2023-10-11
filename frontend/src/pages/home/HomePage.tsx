@@ -12,12 +12,13 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   padding: 0.4em;
+  gap: 0.6em;
 `;
 
 const NewEntryButton = styled.button`
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.4em;
   font-size: 2em;
   font-weight: 500;
   background-color: #f7c297;
@@ -29,7 +30,7 @@ const NewEntryButton = styled.button`
 const AddButtonIcon = styled.img`
   width: 1.6em;
   position: absolute;
-  top: 0.4em;
+  top: 0.2em;
   left: 1.2em;
 `
 
