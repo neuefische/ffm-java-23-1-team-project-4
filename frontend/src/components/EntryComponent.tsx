@@ -2,6 +2,8 @@ import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import BookmarkSvg from "../assets/bookmark.svg";
+import PencilSvg from "../assets/pencil.svg";
+import TrashSvg from "../assets/trash.svg";
 
 export type props = {
     blogEntry: BlogEntry,
@@ -47,6 +49,32 @@ const BookmarkButton = styled.button`
   cursor: pointer;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.4em;
+`;
+
+const Button = styled.button`
+  border-radius: 10px;
+  position: relative;
+  align-self: end;
+  padding: 0;
+  background-color: #90d2d8;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 3em;
+  font-size: 1em;
+`;
+
+const ButtonImage = styled.img`
+  position: absolute;
+  left: 0.6em;
+  top: 0.8em;
+  width: 1.4em;
+`;
+
 const TagList = styled.ul`
   display: flex;
   flex-direction: row;
@@ -87,8 +115,14 @@ export default function EntryComponent(props: props) {
                      alt="Bookmark"/>
             </BookmarkButton>
             <p>{props.blogEntry.content}</p>
-            <button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>Delete</button>
-            <button type="button" onClick={handleEditEntry}>Edit</button>
+            <ButtonContainer>
+                <Button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>
+                    <ButtonImage src={TrashSvg} alt="Trash Icon"/>Delete
+                </Button>
+                <Button type="button" onClick={handleEditEntry}>
+                    <ButtonImage src={PencilSvg} alt="Pencil Icon"/>Edit
+                </Button>
+            </ButtonContainer>
             <TagList>
                 {props.blogEntry.hashtags.map(hashtag => {
                         return <Tag>{hashtag}</Tag>
