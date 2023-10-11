@@ -16,7 +16,6 @@ public class BlogService
 
     public List<BlogResponse> getAllBlogs() {
 
-
         return blogRepo.findAll().stream()
                 .map(bms::mapBlogToResponse)
                 .toList();
@@ -41,13 +40,14 @@ public class BlogService
         blogRepo.deleteById(id);
     }
 
-    public BlogResponse updateBlogEntry(String id, NewBlog newBlog)
+    public BlogResponse updateBlogEntry(String id, BlogEntry updatedBlog)
     {
         BlogEntry blog = blogRepo.findById(id).orElseThrow();
 
-        //Only setting content and title as of now
-        blog.setContent(newBlog.getContent());
-        blog.setTitle(newBlog.getTitle());
+        blog.setTitle(updatedBlog.getTitle());
+        blog.setContent(updatedBlog.getContent());
+        blog.setHashtags(updatedBlog.getHashtags());
+        //time created is not updated but could be changed if needed
         blogRepo.save(blog);
 
         return bms.mapBlogToResponse(blog);

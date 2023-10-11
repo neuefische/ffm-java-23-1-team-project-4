@@ -1,5 +1,6 @@
 import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 export type props = {
     blogEntry: BlogEntry,
@@ -54,9 +55,14 @@ export default function EntryComponent(props: props) {
                         .toLocaleDateString()
     const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
     const time: string = new Date(props.blogEntry.timeCreated).toLocaleTimeString(undefined, timeOptions);
+    const navigateTo = useNavigate()
 
     function handleClickBookmark() {
         console.log("Bookmark was clicked.")
+    }
+
+    function handleEditEntry() {
+        navigateTo("/edit-entry/" + props.blogEntry.id)
     }
 
     return <>
@@ -68,6 +74,7 @@ export default function EntryComponent(props: props) {
             <BookmarkButton type="button" onClick={handleClickBookmark}>Bookmark</BookmarkButton>
             <p>{props.blogEntry.content}</p>
             <button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>Delete</button>
+            <button type="button" onClick={handleEditEntry}>Edit</button>
             <TagList>Tags:
                 {props.blogEntry.hashtags.map(hashtag=> {
                         return <Tag>{hashtag}</Tag>

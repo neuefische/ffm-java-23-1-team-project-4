@@ -1,5 +1,6 @@
 package four.groupwork.backend.features.blog.controller;
 
+import four.groupwork.backend.features.blog.model.BlogEntry;
 import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
 import four.groupwork.backend.features.blog.service.BlogService;
@@ -46,8 +47,8 @@ public class BlogController
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BlogResponse updateBlog(@PathVariable String id, @RequestBody NewBlog newBlog)
+    public BlogResponse updateBlog(@PathVariable String id, @RequestBody BlogEntry updatedBlog)
     {
-        return blogService.updateBlogEntry(id, newBlog);
+        return blogService.updateBlogEntry(id, updatedBlog);
     }
 }
