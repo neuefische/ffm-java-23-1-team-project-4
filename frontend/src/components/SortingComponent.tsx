@@ -1,11 +1,34 @@
 import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import {ChangeEvent} from "react";
+import styled from "styled-components";
 
 type props =
     {
         entries : BlogEntry[],
         setEntries : (entries : BlogEntry[]) => void
-    }
+    };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: flex-end;
+  justify-content: end;
+  gap: 0.4em;
+  padding: 0.4em;
+  
+`;
+const SortLabel = styled.label`
+    font-size: 1em;
+`;
+
+const SortSelect = styled.select`
+  font-size: 1em;
+    
+`;
+
+const SortOption = styled.option`
+font-size: 1em;
+`;
 
 export default function SortingComponent( props  : props) {
 
@@ -20,11 +43,11 @@ export default function SortingComponent( props  : props) {
         props.setEntries(sortedEntries);
     }
 
-    return <>
-        <label htmlFor="sort-by">Sort by</label>
-        <select id="sort-by" onChange={handleChangeSortBy}>
-            <option value="newest to oldest">newest to oldest</option>
-            <option value="oldest to newest">oldest to newest</option>
-        </select>
-    </>
+    return <Container>
+        <SortLabel htmlFor="sort-by">Sort by</SortLabel>
+        <SortSelect id="sort-by" onChange={handleChangeSortBy}>
+            <SortOption value="oldest to newest">oldest to newest</SortOption>
+            <SortOption value="newest to oldest">newest to oldest</SortOption>
+        </SortSelect>
+    </Container>
 }

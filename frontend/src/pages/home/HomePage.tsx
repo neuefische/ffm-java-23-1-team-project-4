@@ -5,6 +5,34 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {BlogEntry} from "../../model/BlogEntryModel.tsx";
 import AppHeader from "../../components/AppHeader.tsx";
+import styled from "styled-components";
+
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  padding: 0.4em;
+`;
+
+const NewEntryButton = styled.button`
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 2em;
+  font-weight: 500;
+  background-color: #f7c297;
+  cursor: pointer;
+  transition: border-color 0.25s;
+`;
+
+const BlogList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  padding: 1em;
+  gap: 2em;
+`;
 
 export default function HomePage() {
     const [entries, setEntries] = useState<BlogEntry[]>([]);
@@ -38,16 +66,17 @@ export default function HomePage() {
     return (
         <>
             <AppHeader headerText="MyBlog App"/>
-            <button onClick={() => navigateTo("/newentry")}>NewEntry</button>
+            <Main>
+            <NewEntryButton type="button" onClick={() => navigateTo("/newentry")}>New Entry</NewEntryButton>
             <SortingComponent entries={entries} setEntries={setEntries}/>
-            <ul>{entries.map((entry) => {
+            <BlogList>{entries.map((entry) => {
                 return <>
                     <EntryComponent key={entry.id} blogEntry={entry} onDeleteEntry={handleDeleteEntry}/>
                 </>
             })
             }
-            </ul>
-
+            </BlogList>
+            </Main>
         </>
     )
 }

@@ -1,6 +1,7 @@
 import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
+import BookmarkSvg from "../assets/bookmark.svg";
 
 export type props = {
     blogEntry: BlogEntry,
@@ -8,52 +9,64 @@ export type props = {
 }
 
 const Container = styled.li`
-  border: 1px black solid;
+  border: 0.4em #ffecb8 solid;
   border-radius: 10px;
-  background-color: #646cff;
   display: flex;
   flex-direction: column;
   align-content: center;
-  padding: 0.6em;
-  width: 100%;
+  padding: 1em;
   position: relative;
-  left: 0;
-  right: 0;
-  align-self: center;
+  gap: 0.4em;
 `;
 
 const Title = styled.h2`
-  font-size: 2em;`;
+  font-size: 2em;
+  align-self: center;
+  color: #f7c297
+`;
 
-const TitleContainer = styled.div`
-  display: flex;
-  justify-content: center;`
+const EntryDate = styled.small`
+  align-self: flex-start;
+  position: absolute;
+  top: 0.4em;
+  left: 0.4em;
+  font-size: 0.8em;
+  color: #90d2d8
+`;
 
 const BookmarkButton = styled.button`
-  width: 1em;
+  width: 3em;
   border-radius: 10px;
-  border: 0.2em black solid;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -1.2em;
+  right: 0.2em;
+  align-self: end;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
 `;
 
 const TagList = styled.ul`
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  gap: 0.4em;
+  list-style: none;
 `;
 
 const Tag = styled.li`
-border: solid black 1px;
-padding: 0.2em;`;
+  padding: 0.2em;`;
 
 
 export default function EntryComponent(props: props) {
 
-    const date : string = new Date(props.blogEntry.timeCreated)
-                        .toLocaleDateString()
-    const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+    const date: string = new Date(props.blogEntry.timeCreated)
+        .toLocaleDateString()
+    const timeOptions: Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit'};
     const time: string = new Date(props.blogEntry.timeCreated).toLocaleTimeString(undefined, timeOptions);
     const navigateTo = useNavigate()
 
@@ -67,16 +80,17 @@ export default function EntryComponent(props: props) {
 
     return <>
         <Container>
-            <TitleContainer>
-                <Title>{props.blogEntry.title}</Title>
-                <small>{date + " " + time}</small>
-            </TitleContainer>
-            <BookmarkButton type="button" onClick={handleClickBookmark}>Bookmark</BookmarkButton>
+            <Title>{props.blogEntry.title}</Title>
+            <EntryDate>{date + " " + time}</EntryDate>
+            <BookmarkButton type="button" onClick={handleClickBookmark}>
+                <img src={BookmarkSvg}
+                     alt="Bookmark"/>
+            </BookmarkButton>
             <p>{props.blogEntry.content}</p>
             <button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>Delete</button>
             <button type="button" onClick={handleEditEntry}>Edit</button>
-            <TagList>Tags:
-                {props.blogEntry.hashtags.map(hashtag=> {
+            <TagList>
+                {props.blogEntry.hashtags.map(hashtag => {
                         return <Tag>{hashtag}</Tag>
                     }
                 )}
