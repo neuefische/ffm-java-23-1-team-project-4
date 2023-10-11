@@ -1,5 +1,6 @@
 import {useNavigate} from "react-router-dom";
-import EntryComponent from "../../EntryComponent.tsx";
+import EntryComponent from "../../components/EntryComponent.tsx";
+import SortingComponent from "../../components/SortingComponent.tsx";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {BlogEntry} from "../../model/BlogEntryModel.tsx";
@@ -37,6 +38,7 @@ export default function HomePage() {
         <>
             <h1>MyBlogApp</h1>
             <button onClick={() => navigateTo("/newentry")}>NewEntry</button>
+            <SortingComponent entries={entries} setEntries={setEntries}/>
             <ul>{entries.map((entry) => {
                 return <>
                     <EntryComponent key={entry.id} blogEntry={entry} onDeleteEntry={handleDeleteEntry}/>
