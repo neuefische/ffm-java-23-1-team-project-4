@@ -4,6 +4,7 @@ import SortingComponent from "../../components/SortingComponent.tsx";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {BlogEntry} from "../../model/BlogEntryModel.tsx";
+import AppHeader from "../../components/AppHeader.tsx";
 
 export default function HomePage() {
     const [entries, setEntries] = useState<BlogEntry[]>([]);
@@ -36,7 +37,7 @@ export default function HomePage() {
 
     return (
         <>
-            <h1>MyBlogApp</h1>
+            <AppHeader headerText="MyBlog App"/>
             <button onClick={() => navigateTo("/newentry")}>NewEntry</button>
             <SortingComponent entries={entries} setEntries={setEntries}/>
             <ul>{entries.map((entry) => {
