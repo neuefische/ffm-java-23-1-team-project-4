@@ -88,15 +88,14 @@ export default function NewBlogEntry() {
     };
 
     const changeTagName = (index: number, name: string) => {
-        const newTags = [...tags]; // Clone the tags array
-        newTags[index].name = name; // Change the name of the tag at the given index
-        setTags(newTags); // Update the state
+        const newTags = [...tags];
+        newTags[index].name = name;
+        setTags(newTags);
     };
 
     const navigateTo = useNavigate()
 
     function handleOnSubmit() {
-        //function to delete and entry with the name default text
         const filteredTags = tags.filter(tag => tag.name !== "");
         const mytags = filteredTags.map((item) => item.name)
 
@@ -111,14 +110,11 @@ export default function NewBlogEntry() {
             .then((response) => {
 
                 console.log("Erfolgreich gespeichert:", response.data);
-                // Füge hier ggf. weitere Aktionen nach erfolgreicher Speicherung hinzu
             })
             .then(() => navigateTo("/"))
             .catch((error) => {
                 // Fehler verarbeiten
                 console.error("Fehler beim Speichern:", error);
-                // Füge hier ggf. Fehlerbehandlung hinzu
-                //Damit es klappt
             });
     }
 
