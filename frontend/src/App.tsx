@@ -3,8 +3,7 @@ import './App.css'
 import HomePage from "./pages/home/HomePage.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import NewBlogEntry from "./pages/blogentry/NewBlogEntry.tsx";
-import EditBlogEntry2 from "./features/blogentry/EditBlogEntry2.tsx";
-
+import EditBlogEntry2 from "./pages/blogentry/EditBlogEntry2.tsx";
 export default function App()
 {
   return (

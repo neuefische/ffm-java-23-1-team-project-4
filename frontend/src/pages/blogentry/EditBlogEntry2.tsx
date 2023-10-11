@@ -4,7 +4,7 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 
 
-export default function EditBlogEntry(){
+export default function EditBlogEntry2(){
 
     const navigateTo = useNavigate()
     const { id } = useParams();
