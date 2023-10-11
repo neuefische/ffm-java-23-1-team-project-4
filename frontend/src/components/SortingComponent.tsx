@@ -1,15 +1,23 @@
-export default function SortingComponent({entries, setEntries}) {
+import {BlogEntry} from "../model/BlogEntryModel.tsx";
+import {ChangeEvent} from "react";
 
-    function handleChangeSortBy(event) {
+type props =
+    {
+        entries : BlogEntry[],
+        setEntries : (entries : BlogEntry[]) => void
+    }
+
+export default function SortingComponent( props  : props) {
+
+    function handleChangeSortBy(event : ChangeEvent<HTMLSelectElement>) {
         const sortBy = event.target.value;
-        const sortedEntries = [...entries];
+        const sortedEntries = [...props.entries];
         if (sortBy === 'newest to oldest') {
-            sortedEntries.sort((a, b) => new Date(b.timeCreated) - new Date(a.timeCreated));
+            sortedEntries.sort((a, b) => new Date(b.timeCreated).getTime()  - new Date(a.timeCreated).getTime());
         } else if (sortBy === 'oldest to newest') {
-            sortedEntries.sort((a, b) => new Date(a.timeCreated) - new Date(b.timeCreated));
+            sortedEntries.sort((a, b) => new Date(a.timeCreated).getTime() - new Date(b.timeCreated).getTime());
         }
-        setEntries(sortedEntries);
-
+        props.setEntries(sortedEntries);
     }
 
     return <>
