@@ -2,12 +2,9 @@ import {BlogEntry} from "../model/BlogEntryModel.tsx";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import BookmarkSvg from "../assets/bookmark.svg";
-import PencilSvg from "../assets/pencil.svg";
-import TrashSvg from "../assets/trash.svg";
 
 export type props = {
-    blogEntry: BlogEntry,
-    onDeleteEntry: (id: string) => void;
+    blogEntry: BlogEntry;
 }
 
 const Container = styled.li`
@@ -49,12 +46,6 @@ const BookmarkButton = styled.button`
   cursor: pointer;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4em;
-`;
-
 const Button = styled.button`
   border-radius: 10px;
   position: relative;
@@ -66,13 +57,6 @@ const Button = styled.button`
   width: 100%;
   height: 3em;
   font-size: 1em;
-`;
-
-const ButtonImage = styled.img`
-  position: absolute;
-  left: 0.6em;
-  top: 0.8em;
-  width: 1.4em;
 `;
 
 const TagList = styled.ul`
@@ -102,9 +86,20 @@ export default function EntryComponent(props: props) {
         console.log("Bookmark was clicked.")
     }
 
-    function handleEditEntry() {
-        navigateTo("/edit-entry/" + props.blogEntry.id)
+    function handleClickMore() {
+        navigateTo("/details/" + props.blogEntry.id)
     }
+
+    function truncateString(str : string, maxLength : number) {
+        if (str.length <= maxLength) {
+            return str; // Return the original string if it's less than or equal to maxLength
+        } else {
+            return str.slice(0, maxLength) + "..."; // Truncate and add "..."
+        }
+    }
+
+    const originalString = props.blogEntry.content;
+    const truncatedString = truncateString(originalString, 100);
 
     return <>
         <Container>
@@ -114,15 +109,9 @@ export default function EntryComponent(props: props) {
                 <img src={BookmarkSvg}
                      alt="Bookmark"/>
             </BookmarkButton>
-            <p>{props.blogEntry.content}</p>
-            <ButtonContainer>
-                <Button type="button" onClick={() => props.onDeleteEntry(props.blogEntry.id)}>
-                    <ButtonImage src={TrashSvg} alt="Trash Icon"/>Delete
+            <p>{truncatedString}</p>
+                <Button type="button" onClick={handleClickMore}>Show more
                 </Button>
-                <Button type="button" onClick={handleEditEntry}>
-                    <ButtonImage src={PencilSvg} alt="Pencil Icon"/>Edit
-                </Button>
-            </ButtonContainer>
             <TagList>
                 {props.blogEntry.hashtags.map(hashtag => {
                         return <Tag>{hashtag}</Tag>
