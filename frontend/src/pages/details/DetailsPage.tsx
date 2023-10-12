@@ -107,17 +107,16 @@ const Tag = styled.li`
 
 export default function DetailsPage() {
     const {id} = useParams();
-    const [blogEntry, setBlogEntry] = useState<BlogEntry>();
+    const [blogEntry, setBlogEntry] = useState<BlogEntry>( {} as BlogEntry);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
     const navigateTo = useNavigate()
 
-    const BlogTitle = blogEntry?.title;
-    const BlogContent = blogEntry?.content;
-    const BlogTimeCreated = blogEntry?.timeCreated;
+    const BlogTitle = blogEntry.title;
+    const BlogContent = blogEntry.content;
+    const BlogTimeCreated = blogEntry.timeCreated;
 
-    const date: string = new Date(BlogTimeCreated)
-        .toLocaleDateString()
+    const date: string = new Date(BlogTimeCreated).toLocaleDateString()
     const timeOptions: Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit'};
     const time: string = new Date(BlogTimeCreated).toLocaleTimeString(undefined, timeOptions);
 
@@ -157,7 +156,7 @@ export default function DetailsPage() {
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Something went wrong</div>
-    return <>
+    return  <>
         <AppHeader headerText="Blog Entry"/>
         <ReturnButton type="button" onClick={() => navigateTo(- 1)}>
             <ReturnButtonImage src={BackSvg} alt="Go back arrow icon"/>
@@ -171,7 +170,7 @@ export default function DetailsPage() {
             </BookmarkButton>
             <p>{BlogContent}</p>
             <ButtonContainer>
-                <Button type="button" onClick={() => handleDeleteEntry(id)}>
+                <Button type="button" onClick={() => handleDeleteEntry(id ? id: "")}>
                     <ButtonImage src={TrashSvg} alt="Trash Icon"/>Delete
                 </Button>
                 <Button type="button" onClick={handleEditEntry}>
