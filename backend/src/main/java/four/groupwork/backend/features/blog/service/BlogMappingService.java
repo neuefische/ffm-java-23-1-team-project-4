@@ -20,7 +20,6 @@ public class BlogMappingService {
                 .hashtags(blogEntry.getHashtags())
                 .timeCreated(blogEntry.getTimeCreated().toString())
                 .build();
-
     }
 
     public BlogEntry mapNewBlogToBlogEntry(NewBlog newBlog){
