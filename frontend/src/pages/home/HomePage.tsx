@@ -60,18 +60,6 @@ export default function HomePage() {
         fetchEntries();
     }, [])
 
-    function handleDeleteEntry(id: string) {
-        axios
-            .delete("/api/blogs/" + id)
-            .then(() => {
-                fetchEntries();
-            })
-            .catch((error) => {
-                console.error("Fehler beim Löschen", error);
-            });
-    }
-
-    console.log(entries);
 
     return (
         <>
@@ -83,7 +71,7 @@ export default function HomePage() {
             <SortingComponent entries={entries} setEntries={setEntries}/>
             <BlogList>{entries.map((entry) => {
                 return <>
-                    <EntryComponent key={entry.id} blogEntry={entry} onDeleteEntry={handleDeleteEntry}/>
+                    <EntryComponent key={entry.id} blogEntry={entry}/>
                 </>
             })
             }
