@@ -3,6 +3,7 @@ package four.groupwork.backend.features.blog.service;
 import four.groupwork.backend.features.blog.model.BlogEntry;
 import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
+import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +15,11 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 class BlogServiceTest
 {
     BlogRepo blogRepo = mock(BlogRepo.class);
-    BlogService blogService = new BlogService(blogRepo, new BlogMappingService());
+    TagService tagService = mock(TagService.class);
+    BlogService blogService = new BlogService(blogRepo, new BlogMappingService(), tagService );
 
     private BlogEntry setUp()
     {
@@ -96,9 +97,10 @@ class BlogServiceTest
     void updateBlogEntry()
     {
         //GIVEN
-        BlogEntry updatedBlog = new BlogEntry("1", "updated title", "updated content",
-                List.of("updated hashtag1", "updated hashtag2"),
-                Instant.now());
+        UpdatedBlogEntry updatedBlog =  new UpdatedBlogEntry();
+        updatedBlog.setTitle("updated title");
+        updatedBlog.setContent("updated content");
+        updatedBlog.setHashtags(List.of("updated hashtag1", "updated hashtag2"));
 
         when(blogRepo.findById("1")).thenReturn(java.util.Optional.of(setUp()));
 
