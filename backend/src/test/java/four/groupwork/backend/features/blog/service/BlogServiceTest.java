@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class BlogServiceTest
 {
@@ -59,7 +58,7 @@ class BlogServiceTest
         newBlog.setContent("content");
         newBlog.setHashtags(List.of("hashtag1", "hashtag2"));
 
-        when(blogRepo.save(new BlogEntry())).thenReturn(setUp());
+        when(blogRepo.save(any(BlogEntry.class))).thenReturn(setUp());
 
         //WHEN
         BlogResponse actual = blogService.addBlogEntry(newBlog);
