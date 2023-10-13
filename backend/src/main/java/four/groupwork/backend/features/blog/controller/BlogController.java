@@ -1,8 +1,8 @@
 package four.groupwork.backend.features.blog.controller;
 
-import four.groupwork.backend.features.blog.model.BlogEntry;
 import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
+import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import four.groupwork.backend.features.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public class BlogController
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BlogResponse updateBlog(@PathVariable String id, @RequestBody BlogEntry updatedBlog)
+    public BlogResponse updateBlog(@PathVariable String id, @RequestBody UpdatedBlogEntry updatedBlog)
     {
         return blogService.updateBlogEntry(id, updatedBlog);
     }
