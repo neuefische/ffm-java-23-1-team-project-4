@@ -14,12 +14,6 @@ public class TagService
 {
     private final TagRepo tagRepo;
 
-    public List<Tag> getAllTags()
-    {
-        return tagRepo.findAll();
-    }
-
-
     public void addTags(List<String> hashtags)
     {
         List<String> filterTags = filterExistingTags(hashtags);
@@ -29,6 +23,11 @@ public class TagService
                         .tagValue(hashtag)
                         .build())
                 .forEach(tagRepo::save);
+    }
+
+    private List<Tag> getAllTags()
+    {
+        return tagRepo.findAll();
     }
 
     private List<String> filterExistingTags(List<String> hashtags)
