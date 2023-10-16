@@ -60,11 +60,33 @@ export default function HomePage() {
         fetchEntries();
     }, [])
 
+    function login() {
+        const host = window.location.host === 'localhost:5173' ?
+            'http://localhost:8080': window.location.origin
+
+        window.open(host + '/oauth2/authorization/github' )
+    }
+
+    function whoAmI()
+    {
+        axios.get("/api/user")
+            .then((response) => {
+                console.log(response.data)
+            })
+            .catch((error) => {
+                console.error("Error found", error);
+            })
+    }
 
     return (
         <>
             <AppHeader headerText="MyBlog App"/>
             <Main>
+                <p> Login stuff</p>
+                <button onClick={login}> Log in</button>
+                <button onClick={whoAmI}> Who am I</button>
+
+
             <NewEntryButton type="button" onClick={() => navigateTo("/newentry")}>
                 <AddButtonIcon src={AddIcon} alt="Add Icon"/>New Entry
             </NewEntryButton>

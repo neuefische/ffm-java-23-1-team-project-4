@@ -1,11 +1,13 @@
 package four.groupwork.backend.features.blog.controller;
 
+import com.nimbusds.jose.proc.SecurityContext;
 import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
 import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import four.groupwork.backend.features.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class BlogController
     @ResponseStatus(HttpStatus.CREATED)
     public BlogResponse addBlog(@RequestBody NewBlog newBlog)
     {
+        //this get the github Id
         return blogService.addBlogEntry(newBlog);
     }
 

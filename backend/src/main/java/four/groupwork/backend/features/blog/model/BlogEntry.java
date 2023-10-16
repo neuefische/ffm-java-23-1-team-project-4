@@ -24,4 +24,6 @@ public class BlogEntry
     private List<String> hashtags;
 
     private Instant timeCreated;
+
+    private String author;
 }

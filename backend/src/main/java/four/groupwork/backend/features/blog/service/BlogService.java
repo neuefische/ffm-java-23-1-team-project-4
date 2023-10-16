@@ -5,6 +5,9 @@ import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
 import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -78,4 +81,6 @@ public class BlogService
         return bms.mapBlogToResponse(blog);
 
     }
+
+
 }
