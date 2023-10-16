@@ -3,6 +3,7 @@ package four.groupwork.backend.features.blog.service;
 import four.groupwork.backend.features.blog.model.BlogEntry;
 import four.groupwork.backend.features.blog.model.BlogResponse;
 import four.groupwork.backend.features.blog.model.NewBlog;
+import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,6 +14,7 @@ public class BlogService
 {
     private final BlogRepo blogRepo;
     private final BlogMappingService bms;
+    private final TagService tagService;
 
     public List<BlogResponse> getAllBlogs() {
 
@@ -24,9 +26,29 @@ public class BlogService
     public BlogResponse addBlogEntry(NewBlog newBlog)
     {
         BlogEntry blog = bms.mapNewBlogToBlogEntry(newBlog);
-        blogRepo.save(blog);
+
+        removeDuplicatedHashtags(blog);
+        setHashTagsToLowerCase(blog);
+
+        BlogEntry savedBlog = blogRepo.save(blog);
+
+        tagService.addTags(savedBlog.getHashtags());
 
         return bms.mapBlogToResponse(blog);
+    }
+
+    private void setHashTagsToLowerCase(BlogEntry blog)
+    {
+        blog.setHashtags(blog.getHashtags().stream()
+                .map(String::toLowerCase)
+                .toList());
+    }
+
+    private void removeDuplicatedHashtags(BlogEntry blog)
+    {
+        blog.setHashtags(blog.getHashtags().stream()
+                .distinct()
+                .toList());
     }
 
     public BlogResponse getBlogEntry(String id)
@@ -40,16 +62,20 @@ public class BlogService
         blogRepo.deleteById(id);
     }
 
-    public BlogResponse updateBlogEntry(String id, BlogEntry updatedBlog)
+    public BlogResponse updateBlogEntry(String id, UpdatedBlogEntry updatedBlog)
     {
         BlogEntry blog = blogRepo.findById(id).orElseThrow();
-
         blog.setTitle(updatedBlog.getTitle());
         blog.setContent(updatedBlog.getContent());
         blog.setHashtags(updatedBlog.getHashtags());
-        //time created is not updated but could be changed if needed
+
+        removeDuplicatedHashtags(blog);
+        setHashTagsToLowerCase(blog);
+
         blogRepo.save(blog);
 
+
         return bms.mapBlogToResponse(blog);
+
     }
 }
