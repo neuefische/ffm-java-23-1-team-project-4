@@ -65,6 +65,7 @@ public class BlogService
         blogRepo.deleteById(id);
     }
 
+
     public BlogResponse updateBlogEntry(String id, UpdatedBlogEntry updatedBlog)
     {
         BlogEntry blog = blogRepo.findById(id).orElseThrow();
@@ -79,7 +80,6 @@ public class BlogService
 
 
         return bms.mapBlogToResponse(blog);
-
     }
 
 
