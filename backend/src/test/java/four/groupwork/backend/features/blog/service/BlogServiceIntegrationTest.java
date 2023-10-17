@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -117,6 +118,7 @@ class BlogServiceIntegrationTest
         SecurityContextHolder.setContext(securityContext);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/blogs")
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "test")))
                 .contentType("application/json")
                 .content("""
                     {

@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.test.context.support.WithMockUser;
 
 
 import java.time.Instant;
@@ -65,7 +64,6 @@ class BlogServiceTest
     }
 
     @Test
-    @WithMockUser(username = "author")
     void addBlogEntry()
     {
         //GIVEN
