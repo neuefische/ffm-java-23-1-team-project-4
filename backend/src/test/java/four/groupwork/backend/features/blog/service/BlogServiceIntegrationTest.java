@@ -6,6 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,7 +22,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -29,6 +40,12 @@ class BlogServiceIntegrationTest
     @Autowired
     BlogRepo blogRepo;
 
+    @MockBean
+    ClientRegistrationRepository clientRegistrationRepository;
+
+    Authentication authentication = mock(Authentication.class);
+    SecurityContext securityContext = mock(SecurityContext.class);
+
     @BeforeEach
     void setUp()
     {
@@ -37,7 +54,7 @@ class BlogServiceIntegrationTest
 
         BlogEntry blogEntry = new BlogEntry( "id1", "title", "content",
                 List.of("tag1", "tag2"),
-                fixedInstant
+                fixedInstant, "author"
         );
         blogRepo.save(blogEntry);
     }
@@ -84,6 +101,7 @@ class BlogServiceIntegrationTest
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void testDeleteEndpoint() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/blogs/id1"))
                 .andExpect(status().isOk());
@@ -92,9 +110,15 @@ class BlogServiceIntegrationTest
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void postAddBlog() throws Exception {
 
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(new DefaultOAuth2User(List.of(), Map.of("login", "name") ,"login"));
+        SecurityContextHolder.setContext(securityContext);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/blogs")
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "test")))
                 .contentType("application/json")
                 .content("""
                     {

@@ -6,11 +6,19 @@ import four.groupwork.backend.features.blog.model.NewBlog;
 import four.groupwork.backend.features.blog.model.UpdatedBlogEntry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -20,6 +28,12 @@ class BlogServiceTest
     TagService tagService = mock(TagService.class);
     BlogService blogService = new BlogService(blogRepo, new BlogMappingService(), tagService );
 
+    @MockBean
+    ClientRegistrationRepository clientRegistrationRepository;
+
+    Authentication authentication = mock(Authentication.class);
+    SecurityContext securityContext = mock(SecurityContext.class);
+
     private BlogEntry setUp()
     {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
@@ -27,7 +41,7 @@ class BlogServiceTest
 
         return new BlogEntry("1", "title", "content",
                 List.of("hashtag1", "hashtag2"),
-                fixedInstant);
+                fixedInstant, "author");
         //fixed instant = 2020-01-01T12:00:00Z
     }
 
@@ -37,7 +51,7 @@ class BlogServiceTest
         //GIVEN
         List<BlogResponse> expected = List.of(new BlogResponse("1", "title", "content",
                 List.of("hashtag1", "hashtag2"),
-                "2020-01-01T12:00:00Z"));
+                "2020-01-01T12:00:00Z", "author"));
 
         when(blogRepo.findAll()).thenReturn(List.of(setUp()));
 
@@ -60,6 +74,10 @@ class BlogServiceTest
 
         when(blogRepo.save(any(BlogEntry.class))).thenReturn(setUp());
 
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(new DefaultOAuth2User(List.of(), Map.of("login", "name") ,"login"));
+        SecurityContextHolder.setContext(securityContext);
+
         //WHEN
         BlogResponse actual = blogService.addBlogEntry(newBlog);
 
@@ -75,7 +93,7 @@ class BlogServiceTest
         //GIVEN
         BlogResponse expected = new BlogResponse("1", "title", "content",
                 List.of("hashtag1", "hashtag2"),
-                "2020-01-01T12:00:00Z");
+                "2020-01-01T12:00:00Z", "author");
 
         when(blogRepo.findById("1")).thenReturn(java.util.Optional.of(setUp()));
 

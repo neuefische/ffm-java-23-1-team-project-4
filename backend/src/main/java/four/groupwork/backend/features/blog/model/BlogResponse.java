@@ -10,6 +10,7 @@ public record BlogResponse(
         String title,
         String content,
         List<String> hashtags,
-        String timeCreated
+        String timeCreated,
+        String author
 ) {
 }

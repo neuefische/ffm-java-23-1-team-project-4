@@ -35,6 +35,7 @@ public class BlogController
     @ResponseStatus(HttpStatus.CREATED)
     public BlogResponse addBlog(@RequestBody NewBlog newBlog)
     {
+        //this get the github Id
         return blogService.addBlogEntry(newBlog);
     }
 

@@ -3,5 +3,6 @@ export type BlogEntry = {
     title: string,
     content: string,
     hashtags: string[],
-    timeCreated:string
+    timeCreated:string,
+    author: string,
 }
